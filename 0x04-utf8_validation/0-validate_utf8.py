@@ -14,7 +14,7 @@ def validUTF8(data):
     """
     # track num of ex[ected following bytes
     if not data:
-       return False
+        return False
 
     next_bytes = 0
 
