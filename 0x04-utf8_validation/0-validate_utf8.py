@@ -13,6 +13,9 @@ def validUTF8(data):
     return true if data is a valid utf-8 encoding
     """
     # track num of ex[ected following bytes
+    if not data:
+       return False
+
     next_bytes = 0
 
     for byte in data:
