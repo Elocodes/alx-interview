@@ -1,20 +1,13 @@
 #!/usr/bin/python3
 """
-Maria and Ben are playing a game. Given a set of consecutive integers
-starting from 1 up to and including n, they take turns choosing a prime number
-from the set and removing that number and its multiples from the set.
+prime game
 """
 
 
 def isWinner(x, nums):
-    """
-    where x is the number of rounds and nums is an array of n
-    Return: name of the player that won the most rounds
-    If the winner cannot be determined, return None
-    You can assume n and x will not be larger than 10000
-    """
+    """ winner """
     def sieve_of_eratosthenes(limit):
-        """ check prime """
+        """ sieve """
         primes = []
         is_prime = [True] * (limit + 1)
         is_prime[0] = is_prime[1] = False
@@ -28,26 +21,22 @@ def isWinner(x, nums):
         return primes
 
     def canWin(n):
-        """ determine player wins """
+        """ winner """
         primes = sieve_of_eratosthenes(n)
         memo = {}
 
-        def helper(num):
-            """ helper func """
-            if num in memo:
-                return memo[num]
+        if n in memo:
+            return memo[n]
 
-            for prime in primes:
-                if num % prime == 0:
-                    next_num = num // prime
-                    if not helper(next_num):
-                        memo[num] = True
-                        return True
+        for prime in primes:
+            if n % prime == 0:
+                next_num = n // prime
+                if not canWin(next_num):
+                    memo[n] = True
+                    return True
 
-            memo[num] = False
-            return False
-
-        return helper(n)
+        memo[n] = False
+        return False
 
     maria_wins = 0
     ben_wins = 0
