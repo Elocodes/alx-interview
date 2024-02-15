@@ -1,48 +1,66 @@
 #!/usr/bin/python3
-""" Prime game """
+"""
+Maria and Ben are playing a game. Given a set of consecutive integers
+starting from 1 up to and including n, they take turns choosing a prime number
+from the set and removing that number and its multiples from the set.
+"""
 
 
 def isWinner(x, nums):
-    """ Determine the winner """
-    if x <= 0 or nums is None or x != len(nums):
-        return None
-
-    def sieve_eratosthenes(n):
-        """ Implement sieve"""
-        is_prime = [True] * (n + 1)
+    """
+    where x is the number of rounds and nums is an array of n
+    Return: name of the player that won the most rounds
+    If the winner cannot be determined, return None
+    You can assume n and x will not be larger than 10000
+    """
+    def sieve_of_eratosthenes(limit):
+        """ check prime """
+        primes = []
+        is_prime = [True] * (limit + 1)
         is_prime[0] = is_prime[1] = False
-        p = 2
-        while p * p <= n:
-            if is_prime[p]:
-                for i in range(p * p, n + 1, p):
-                    is_prime[i] = False
-            p += 1
-        return is_prime
 
-    def remove_multiples(primes, x):
-        """ Implement remove multiples"""
-        n = len(primes)
-        for i in range(2, n):
-            if i * x < n:
-                primes[i * x] = False
-            else:
-                break
+        for number in range(2, int(limit**0.5) + 1):
+            if is_prime[number]:
+                primes.append(number)
+                for multiple in range(number * number, limit + 1, number):
+                    is_prime[multiple] = False
 
-    ben = 0
-    maria = 0
+        return primes
 
-    max_num = max(nums)
-    primes = sieve_eratosthenes(max_num)
+    def canWin(n):
+        """ determine player wins """
+        primes = sieve_of_eratosthenes(n)
+        memo = {}
 
-    for i in nums:
-        if sum(primes[0:i + 1]) % 2 == 0:
-            ben += 1
+        def helper(num):
+            """ helper func """
+            if num in memo:
+                return memo[num]
+
+            for prime in primes:
+                if num % prime == 0:
+                    next_num = num // prime
+                    if not helper(next_num):
+                        memo[num] = True
+                        return True
+
+            memo[num] = False
+            return False
+
+        return helper(n)
+
+    maria_wins = 0
+    ben_wins = 0
+
+    for n in nums:
+        if canWin(n):
+            maria_wins += 1
         else:
-            maria += 1
+            ben_wins += 1
 
-    if ben > maria:
-        return "Ben"
-    if maria > ben:
+    if maria_wins > ben_wins:
         return "Maria"
-
-    return None
+    elif maria_wins < ben_wins:
+        return "Ben"
+    else:
+        return None
