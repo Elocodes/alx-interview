@@ -6,21 +6,6 @@ from the set and removing that number and its multiples from the set.
 """
 
 
-def sieve_of_eratosthenes(limit):
-    """ check prime """
-    primes = []
-    is_prime = [True] * (limit + 1)
-    is_prime[0] = is_prime[1] = False
-
-    for number in range(2, int(limit**0.5) + 1):
-        if is_prime[number]:
-            primes.append(number)
-            for multiple in range(number * number, limit + 1, number):
-                is_prime[multiple] = False
-
-    return primes
-
-
 def isWinner(x, nums):
     """
     where x is the number of rounds and nums is an array of n
@@ -28,6 +13,20 @@ def isWinner(x, nums):
     If the winner cannot be determined, return None
     You can assume n and x will not be larger than 10000
     """
+    def sieve_of_eratosthenes(limit):
+        """ check prime """
+        primes = []
+        is_prime = [True] * (limit + 1)
+        is_prime[0] = is_prime[1] = False
+
+        for number in range(2, int(limit**0.5) + 1):
+            if is_prime[number]:
+                primes.append(number)
+                for multiple in range(number * number, limit + 1, number):
+                    is_prime[multiple] = False
+
+        return primes
+
     def canWin(n):
         """ determine player wins """
         primes = sieve_of_eratosthenes(n)
