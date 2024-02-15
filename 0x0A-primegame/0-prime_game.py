@@ -6,6 +6,9 @@ prime game
 
 def isWinner(x, nums):
     """ winner """
+    if x <= 0 or nums is None or x != len(nums):
+        return None
+
     def sieve_of_eratosthenes(limit):
         """ sieve """
         primes = []
